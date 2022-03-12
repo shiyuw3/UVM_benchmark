@@ -24,9 +24,12 @@
 #define PERCENT_DIFF_ERROR_THRESHOLD 0.05
 
 /* Problem size */
-#define NI 512 * 25
-#define NJ 512 * 25
-#define NK 512 * 25
+// #define NI 512 * 25
+// #define NJ 512 * 25
+// #define NK 512 * 25
+#define NI 28000
+#define NJ 28000
+#define NK 28000
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 32
@@ -128,8 +131,6 @@ void gemmCuda(DATA_TYPE* A_gpu, DATA_TYPE* B_gpu, DATA_TYPE* C_gpu) {
 }
 
 int main(int argc, char *argv[]) {
-  double t_start, t_end;
-
   DATA_TYPE* A;
   DATA_TYPE* B;
   DATA_TYPE* C;
@@ -151,12 +152,16 @@ int main(int argc, char *argv[]) {
 
   gemmCuda(A_gpu, B_gpu, C_gpu);
 
+#if 0
+  double t_start, t_end;
+
   t_start = rtclock();
   gemm(A, B, C);
   t_end = rtclock();
   fprintf(stdout, "CPU Runtime: %0.6lfs\n", t_end - t_start);
 
   compareResults(C, C_gpu);
+#endif
 
   free(A);
   free(B);

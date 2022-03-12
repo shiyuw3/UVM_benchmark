@@ -498,12 +498,15 @@ int main(void) {
   float *query;         // Pointer to query point array
   float *dist, *dist_c; // Pointer to distance array
   int *ind, *ind_c;     // Pointer to index array
-  int ref_nb = 8192;    // Reference point number, max=65535
-  int query_nb = 8192;  // Query point number,     max=65535
+  // ref_nb & query_nb: 
+  // ~45000: 100% usage, ~30s
+  // ~46000: oversubscription, ~300s
+  int ref_nb = 46000;    // Reference point number, max=65535
+  int query_nb = 46000;  // Query point number,     max=65535
   int dim = 32;         // Dimension of points
   int k = 20;           // Nearest neighbors to consider
-  int iterations = 100;
-  int c_iterations = 10;
+  int iterations = 1;
+  // int c_iterations = 10;
   int i;
   const float precision = 0.001f; // distance error max
   int nb_correct_precisions = 0;
@@ -528,12 +531,12 @@ int main(void) {
   for (i = 0; i < query_nb * dim; i++)
     query[i] = (float)rand() / (float)RAND_MAX;
 
-  printf("Ground truth computation in progress...\n\n");
-  if (!knn_c(ref, ref_nb, query, query_nb, dim, k, knn_dist, knn_index)) {
-    free(knn_dist);
-    free(knn_index);
-    return EXIT_FAILURE;
-  }
+  // printf("Ground truth computation in progress...\n\n");
+  // if (!knn_c(ref, ref_nb, query, query_nb, dim, k, knn_dist, knn_index)) {
+  //   free(knn_dist);
+  //   free(knn_index);
+  //   return EXIT_FAILURE;
+  // }
 
   // Variables for duration evaluation
   cudaEvent_t start, stop;
