@@ -23,10 +23,11 @@
 #define GPU_DEVICE 0
 
 /* Problem size. */
-// 45500: ~110% usage.
-// 45470: ~100% usage.
-#define NX 40000
-#define NY 40000
+// 47600: ~110% usage.
+// 46500: ~105% usage.
+// 45400-45450: ~100% usage. 45400: no eviction, 45450: eviction.
+#define NX 45500
+#define NY 45500
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 256
@@ -42,8 +43,12 @@
 typedef float DATA_TYPE;
 
 
-// void init_array(DATA_TYPE *x, DATA_TYPE *A, DATA_TYPE *x_gpu, DATA_TYPE *A_gpu)
+#if ENABLE_CPU
+void init_array(DATA_TYPE *x, DATA_TYPE *A,
+                DATA_TYPE *x_gpu, DATA_TYPE *A_gpu) {
+#else
 void init_array(DATA_TYPE *x_gpu, DATA_TYPE *A_gpu) {
+#endif
   size_t i, j;
 
   for (i = 0; i < NX; i++) {
@@ -72,7 +77,9 @@ void compareResults(DATA_TYPE *z, DATA_TYPE *z_outputFromGpu) {
   }
 
   // print results
-  printf("Non-Matching CPU-GPU Outputs Beyond Error Threshold of %4.2f Percent: %ldd\n", PERCENT_DIFF_ERROR_THRESHOLD, fail);
+  printf("Non-Matching CPU-GPU Outputs Beyond Error Threshold of %4.2f "
+         "Percent: %ld\n",
+         PERCENT_DIFF_ERROR_THRESHOLD, fail);
 }
 
 
@@ -156,11 +163,10 @@ int main(int argc, char** argv) {
   DATA_TYPE* y;
   DATA_TYPE* tmp;
 
-  DATA_TYPE* tmp;
-  A = (DATA_TYPE*)malloc(NX*NY*sizeof(DATA_TYPE));
-  x = (DATA_TYPE*)malloc(NY*sizeof(DATA_TYPE));
-  y = (DATA_TYPE*)malloc(NY*sizeof(DATA_TYPE));
-  tmp = (DATA_TYPE*)malloc(NX*sizeof(DATA_TYPE));
+  A = (DATA_TYPE*)malloc(NX * NY * sizeof(DATA_TYPE));
+  x = (DATA_TYPE*)malloc(NY * sizeof(DATA_TYPE));
+  y = (DATA_TYPE*)malloc(NY * sizeof(DATA_TYPE));
+  tmp = (DATA_TYPE*)malloc(NX * sizeof(DATA_TYPE));
 #endif
 
   cudaMallocManaged(&A_gpu, sizeof(DATA_TYPE) * NX * NY);
@@ -171,6 +177,8 @@ int main(int argc, char** argv) {
   init_array(x_gpu, A_gpu);
   GPU_argv_init();
   ataxGpu(A_gpu, x_gpu, y_gpu, tmp_gpu);
+
+  printf("A: %p, x: %p, y: %p, tmp: %p\n", A_gpu, x_gpu, y_gpu, tmp_gpu);
 
 #if ENABLE_CPU
   double t_start, t_end;
