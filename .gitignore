@@ -14,6 +14,7 @@ k-means/
 results/
 *.ii
 *.pyc
+*.qdrep
 UVM_benchmarks/BN/ordergraph
 UVM_benchmarks/SVM/svm_uvm
 UVM_benchmarks/bfs/main
@@ -144,3 +145,4 @@ data/hotspot3D/temp_4096x16
 nvbit_release/
 trace/
 *_trace
+*.log
