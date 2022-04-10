@@ -91,7 +91,7 @@ __global__ void atax_kernel2(DATA_TYPE *A, DATA_TYPE *y, DATA_TYPE *tmp) {
 
   if (j < NY) {
     int i;
-    for(i = 0; i < NX; i++) {
+    for (i = 0; i < NX; i++) {
       y[j] += A[i * NY + j] * tmp[i];
     }
   }
@@ -109,11 +109,11 @@ void atax_cpu(DATA_TYPE* A, DATA_TYPE* x, DATA_TYPE* y, DATA_TYPE* tmp) {
     tmp[i] = 0;
 
     for (j = 0; j < NY; j++) {
-      tmp[i] = tmp[i] + A[i*NY + j] * x[j];
+      tmp[i] = tmp[i] + A[i * NY + j] * x[j];
     }
 
     for (j = 0; j < NY; j++) {
-      y[j] = y[j] + A[i*NY + j] * tmp[i];
+      y[j] = y[j] + A[i * NY + j] * tmp[i];
     }
   }
 }
