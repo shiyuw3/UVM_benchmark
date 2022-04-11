@@ -22,8 +22,8 @@
 #define GPU_DEVICE 0
 
 /* Problem size */
-#define M 2048
-#define N 2048
+#define M 1024
+#define N 1024
 
 /* Thread block dimensions for kernel 1*/
 #define DIM_THREAD_BLOCK_KERNEL_1_X 256
