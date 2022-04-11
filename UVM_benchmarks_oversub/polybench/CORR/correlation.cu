@@ -22,8 +22,12 @@
 #define GPU_DEVICE 0
 
 /* Problem size */
-#define M 2048 * 6
-#define N 2048 * 6
+// #define M 2048 * 6
+// #define N 2048 * 6
+
+// M=N=32000: ~100%, 32800: ~105%.
+#define M 32800
+#define N 32800
 
 /* Thread block dimensions for kernel 1*/
 #define DIM_THREAD_BLOCK_KERNEL_1_X 256
@@ -49,12 +53,21 @@
 /* Can switch DATA_TYPE between float and double */
 typedef float DATA_TYPE;
 
+#define ENABLE_CPU 0
+
+#if ENABLE_CPU
 void init_arrays(DATA_TYPE* data, DATA_TYPE* data_gpu) {
+#else
+void init_arrays(DATA_TYPE* data_gpu) {
+#endif
+
   int i, j;
 
   for (i = 0; i < (M + 1); i++) {
     for (j = 0; j < (N + 1); j++) {
+#if ENABLE_CPU
       data[i * (N + 1) + j] = ((DATA_TYPE)i * j) / (M + 1);
+#endif
       data_gpu[i * (N + 1) + j] = ((DATA_TYPE)i * j) / (M + 1);
     }
   }
@@ -159,7 +172,6 @@ __global__ void mean_kernel(DATA_TYPE *mean, DATA_TYPE *data) {
   }
 }
 
-
 __global__ void std_kernel(DATA_TYPE *mean, DATA_TYPE *std, DATA_TYPE *data) {
   int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
 
@@ -179,7 +191,6 @@ __global__ void std_kernel(DATA_TYPE *mean, DATA_TYPE *std, DATA_TYPE *data) {
   }
 }
 
-
 __global__ void reduce_kernel(DATA_TYPE *mean, DATA_TYPE *std,
                               DATA_TYPE *data) {
   int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
@@ -190,7 +201,6 @@ __global__ void reduce_kernel(DATA_TYPE *mean, DATA_TYPE *std,
     data[i * (M + 1) + j] /= (sqrt(FLOAT_N) * std[j]);
   }
 }
-
 
 __global__ void corr_kernel(DATA_TYPE *symmat, DATA_TYPE *data) {
   int j1 = blockIdx.x * blockDim.x + threadIdx.x + 1;
@@ -231,13 +241,13 @@ void correlationCuda(DATA_TYPE* data_gpu, DATA_TYPE* mean_gpu,
              1);
 
   t_start = rtclock();
-  mean_kernel<<< grid1, block1 >>>(mean_gpu, data_gpu);
+  mean_kernel<<<grid1, block1>>>(mean_gpu, data_gpu);
   cudaDeviceSynchronize();
-  std_kernel<<< grid2, block2 >>>(mean_gpu, stddev_gpu, data_gpu);
+  std_kernel<<<grid2, block2>>>(mean_gpu, stddev_gpu, data_gpu);
   cudaDeviceSynchronize();
-  reduce_kernel<<< grid3, block3 >>>(mean_gpu, stddev_gpu, data_gpu);
+  reduce_kernel<<<grid3, block3>>>(mean_gpu, stddev_gpu, data_gpu);
   cudaDeviceSynchronize();
-  corr_kernel<<< grid4, block4 >>>(symmat_gpu, data_gpu);
+  corr_kernel<<<grid4, block4>>>(symmat_gpu, data_gpu);
   cudaDeviceSynchronize();
   t_end = rtclock();
   fprintf(stdout, "GPU Runtime: %0.6lfs\n", t_end - t_start);
@@ -249,39 +259,43 @@ void correlationCuda(DATA_TYPE* data_gpu, DATA_TYPE* mean_gpu,
 }
 
 int main() {
-  double t_start, t_end;
-
+#if ENABLE_CPU
   DATA_TYPE* data;
   DATA_TYPE* mean;
   DATA_TYPE* stddev;
   DATA_TYPE* symmat;
+
+  data = (DATA_TYPE*)malloc((M + 1) * (N + 1) * sizeof(DATA_TYPE));
+  mean = (DATA_TYPE*)malloc((M + 1) * sizeof(DATA_TYPE));
+  stddev = (DATA_TYPE*)malloc((M + 1) * sizeof(DATA_TYPE));
+  symmat = (DATA_TYPE*)malloc((M + 1) * (N + 1) * sizeof(DATA_TYPE));
+#endif
 
   DATA_TYPE *data_gpu;
   DATA_TYPE *stddev_gpu;
   DATA_TYPE *mean_gpu;
   DATA_TYPE *symmat_gpu;
 
-  data = (DATA_TYPE*)malloc((M + 1) * (N + 1) * sizeof(DATA_TYPE));
-  mean = (DATA_TYPE*)malloc((M + 1) * sizeof(DATA_TYPE));
-  stddev = (DATA_TYPE*)malloc((M + 1) * sizeof(DATA_TYPE));
-  symmat = (DATA_TYPE*)malloc((M + 1) * (N + 1) * sizeof(DATA_TYPE));
-
-
   cudaMallocManaged(&data_gpu, sizeof(DATA_TYPE) * (M + 1) * (N + 1));
   cudaMallocManaged(&symmat_gpu, sizeof(DATA_TYPE) * (M + 1) * (N + 1));
   cudaMallocManaged(&stddev_gpu, sizeof(DATA_TYPE) * (M + 1));
   cudaMallocManaged(&mean_gpu, sizeof(DATA_TYPE) * (M + 1));
 
+#if ENABLE_CPU
   init_arrays(data, data_gpu);
+#else
+  init_arrays(data_gpu);
+#endif
 
   GPU_argv_init();
 
   correlationCuda(data_gpu, mean_gpu, stddev_gpu, symmat_gpu);
 
+#if ENABLE_CPU
+  double t_start, t_end;
   t_start = rtclock();
   correlation(data, mean, stddev, symmat);
   t_end = rtclock();
-
   fprintf(stdout, "CPU Runtime: %0.6lfs\n", t_end - t_start);
 
   compareResults(symmat, symmat_gpu);
@@ -290,6 +304,7 @@ int main() {
   free(mean);
   free(stddev);
   free(symmat);
+#endif
 
   cudaFree(data_gpu);
   cudaFree(symmat_gpu);
