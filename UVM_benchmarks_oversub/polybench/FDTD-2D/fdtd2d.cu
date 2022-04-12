@@ -26,9 +26,12 @@
 // #define tmax 500
 // #define NX 2048 * 6
 // #define NY 2048 * 6
+
 #define tmax 20
-#define NX 26300
-#define NY 26300
+
+// NX=NY=26100: ~100%, 27000: ~105%.
+#define NX 27000
+#define NY 27000
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 32
