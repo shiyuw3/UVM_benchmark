@@ -27,9 +27,11 @@
 // #define NI 512 * 25
 // #define NJ 512 * 25
 // #define NK 512 * 25
-#define NI 28000
-#define NJ 28000
-#define NK 28000
+
+// ~100% usage: 26400, ~105% usage: 27000.
+#define NI 27000
+#define NJ 27000
+#define NK 27000
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 32
