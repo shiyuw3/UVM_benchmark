@@ -12,12 +12,14 @@
 #include <cstdio>
 #include <sys/time.h>
 #include <time.h>
+
 // Constants used by the program
 #define BLOCK_DIM 16
+#define ENABLE_CPU 0
 
-//-----------------------------------------------------------------------------------------------//
-//                                            KERNELS //
-//-----------------------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
+//                                    KERNELS                                 //
+//----------------------------------------------------------------------------//
 __global__ void extract_with_interpolation(int nthreads, float *data,
                                            float *n_xy_coords,
                                            float *extracted_data,
@@ -247,9 +249,9 @@ __global__ void cuParallelSqrt(float *dist, int width, int k) {
     dist[yIndex * width + xIndex] = sqrt(dist[yIndex * width + xIndex]);
 }
 
-//-----------------------------------------------------------------------------------------------//
-//                                   K-th NEAREST NEIGHBORS //
-//-----------------------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
+//                           K-th NEAREST NEIGHBORS                           //
+//----------------------------------------------------------------------------//
 
 /**
   * Prints the error message return during the memory allocation.
@@ -498,22 +500,29 @@ int main(void) {
   float *query;         // Pointer to query point array
   float *dist, *dist_c; // Pointer to distance array
   int *ind, *ind_c;     // Pointer to index array
-  int ref_nb = 4096;    // Reference point number, max=65535
-  int query_nb = 4096;  // Query point number,     max=65535
+  // ref_nb & query_nb:
+  // ~45000: 100% usage, ~30s
+  // ~46000: oversubscription, ~300s
+  int ref_nb = 46000;    // Reference point number, max=65535
+  int query_nb = 46000;  // Query point number,     max=65535
   int dim = 32;         // Dimension of points
   int k = 20;           // Nearest neighbors to consider
-  int iterations = 100;
+  int iterations = 1;
+#if ENABLE_CPU
   int c_iterations = 10;
+#endif
   int i;
   const float precision = 0.001f; // distance error max
-  int nb_correct_precisions = 0;
-  int nb_correct_indexes = 0;
+  int nb_correct_precisions, nb_correct_indexes;
+  float precision_accuracy, index_accuracy;
   float *knn_dist = (float *)malloc(query_nb * k * sizeof(float));
   int *knn_index = (int *)malloc(query_nb * k * sizeof(int));
 
+#if ENABLE_CPU
   // Memory allocation
-  // ref = (float *)malloc(ref_nb * dim * sizeof(float));
-  // query = (float *)malloc(query_nb * dim * sizeof(float));
+  ref = (float *)malloc(ref_nb * dim * sizeof(float));
+  query = (float *)malloc(query_nb * dim * sizeof(float));
+#endif
   cudaMallocManaged(&ref, ref_nb * dim * sizeof(float));
   cudaMallocManaged(&query, query_nb * dim * sizeof(float));
   cudaMallocManaged(&dist, query_nb * ref_nb * sizeof(float));
@@ -528,12 +537,14 @@ int main(void) {
   for (i = 0; i < query_nb * dim; i++)
     query[i] = (float)rand() / (float)RAND_MAX;
 
+#if ENABLE_CPU
   printf("Ground truth computation in progress...\n\n");
   if (!knn_c(ref, ref_nb, query, query_nb, dim, k, knn_dist, knn_index)) {
     free(knn_dist);
     free(knn_index);
     return EXIT_FAILURE;
   }
+#endif
 
   // Variables for duration evaluation
   cudaEvent_t start, stop;
@@ -548,7 +559,12 @@ int main(void) {
   printf("Number of neighbors to consider : %4d\n", k);
   printf("Processing kNN search           :\n");
 
+#if ENABLE_CPU
   printf("On CPU: \n");
+
+  nb_correct_precision = 0;
+  nb_correct_indexes = 0;
+
   struct timeval tic;
   gettimeofday(&tic, NULL);
   for (i = 0; i < c_iterations; i++) {
@@ -568,12 +584,17 @@ int main(void) {
   gettimeofday(&toc, NULL);
   elapsed_time = toc.tv_sec - tic.tv_sec;
   elapsed_time += (toc.tv_usec - tic.tv_usec) / 1000000.;
-  float precision_accuracy = nb_correct_precisions / ((float)query_nb * k);
-  float index_accuracy = nb_correct_indexes / ((float)query_nb * k);
+  precision_accuracy = nb_correct_precisions / ((float)query_nb * k);
+  index_accuracy = nb_correct_indexes / ((float)query_nb * k);
   printf("%f, %f\n", precision_accuracy, index_accuracy);
-  printf(" done in %f s for %d iterations (%f s by iteration)\n", elapsed_time,
-         c_iterations, elapsed_time / (c_iterations));
+  printf(" done in %f s for %d iterations (%f s by iteration)\n",
+         elapsed_time, c_iterations, elapsed_time / (c_iterations));
+#endif
+
   printf("on GPU: \n");
+
+  nb_correct_precisions = 0;
+  nb_correct_indexes = 0;
 
   // Call kNN search CUDA
   cudaEventRecord(start, 0);
@@ -581,8 +602,6 @@ int main(void) {
     knn_cuda(ref, ref_nb, query, query_nb, dim, k, dist, ind);
   }
 
-  nb_correct_precisions = 0;
-  nb_correct_indexes = 0;
   for (int i = 0; i < query_nb * k; ++i) {
     if (fabs(dist[i] - knn_dist[i]) <= precision) {
       nb_correct_precisions++;
