@@ -169,7 +169,6 @@ __global__ void cuComputeDistanceGlobal(float *A, int wA, float *B, int wB,
   */
 __global__ void cuInsertionSort(float *dist, int *ind, int width, int height,
                                 int k) {
-  // printf("test2\n");
   // Variables
   int l, i, j;
   float *p_dist;
@@ -244,7 +243,6 @@ __global__ void cuInsertionSort(float *dist, int *ind, int width, int height,
 __global__ void cuParallelSqrt(float *dist, int width, int k) {
   unsigned int xIndex = blockIdx.x * blockDim.x + threadIdx.x;
   unsigned int yIndex = blockIdx.y * blockDim.y + threadIdx.y;
-  // printf("test3\n");
   if (xIndex < width && yIndex < k)
     dist[yIndex * width + xIndex] = sqrt(dist[yIndex * width + xIndex]);
 }
@@ -500,11 +498,11 @@ int main(void) {
   float *query;         // Pointer to query point array
   float *dist, *dist_c; // Pointer to distance array
   int *ind, *ind_c;     // Pointer to index array
-  // ref_nb & query_nb:
-  // ~45000: 100% usage, ~30s
-  // ~46000: oversubscription, ~300s
-  int ref_nb = 46000;    // Reference point number, max=65535
-  int query_nb = 46000;  // Query point number,     max=65535
+  // ref_nb & query_nb, 1 iter:
+  // ~45100: ~100% usage
+  // ~46300: ~105% usage
+  int ref_nb = 46300;    // Reference point number, max=65535
+  int query_nb = 46300;  // Query point number,     max=65535
   int dim = 32;         // Dimension of points
   int k = 20;           // Nearest neighbors to consider
   int iterations = 1;
