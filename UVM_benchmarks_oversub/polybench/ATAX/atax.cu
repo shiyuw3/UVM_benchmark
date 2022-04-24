@@ -134,17 +134,18 @@ void atax_cpu(DATA_TYPE* A, DATA_TYPE* x, DATA_TYPE* y, DATA_TYPE* tmp) {
 }
 
 
-void ataxGpu(DATA_TYPE* A_gpu, DATA_TYPE* x_gpu, DATA_TYPE* y_gpu, DATA_TYPE* tmp_gpu) {
+void ataxGpu(DATA_TYPE* A_gpu, DATA_TYPE* x_gpu, DATA_TYPE* y_gpu,
+             DATA_TYPE* tmp_gpu) {
   double t_start, t_end;
 
   dim3 block(DIM_THREAD_BLOCK_X, DIM_THREAD_BLOCK_Y);
-  dim3 grid1((size_t)(ceil( ((float)NX) / ((float)block.x) )), 1);
-  dim3 grid2((size_t)(ceil( ((float)NY) / ((float)block.x) )), 1);
+  dim3 grid1((size_t)(ceil(((float)NX) / ((float)block.x))), 1);
+  dim3 grid2((size_t)(ceil(((float)NY) / ((float)block.x))), 1);
 
   t_start = rtclock();
-  atax_kernel1<<< grid1, block >>>(A_gpu, x_gpu, tmp_gpu);
+  atax_kernel1<<<grid1, block>>>(A_gpu, x_gpu, tmp_gpu);
   cudaDeviceSynchronize();
-  atax_kernel2<<< grid2, block >>>(A_gpu, y_gpu, tmp_gpu);
+  atax_kernel2<<<grid2, block>>>(A_gpu, y_gpu, tmp_gpu);
   cudaDeviceSynchronize();
   t_end = rtclock();
   fprintf(stdout, "GPU Runtime: %0.6lfs\n", t_end - t_start);
@@ -174,11 +175,14 @@ int main(int argc, char** argv) {
   cudaMallocManaged(&y_gpu, sizeof(DATA_TYPE) * NY);
   cudaMallocManaged(&tmp_gpu, sizeof(DATA_TYPE) * NX);
 
+#if ENABLE_CPU
+  init_array(x, A, x_gpu, A_gpu);
+#else
   init_array(x_gpu, A_gpu);
+#endif
+
   GPU_argv_init();
   ataxGpu(A_gpu, x_gpu, y_gpu, tmp_gpu);
-
-  printf("A: %p, x: %p, y: %p, tmp: %p\n", A_gpu, x_gpu, y_gpu, tmp_gpu);
 
 #if ENABLE_CPU
   double t_start, t_end;
