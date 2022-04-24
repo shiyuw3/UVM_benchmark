@@ -136,7 +136,7 @@ void gesummvCuda(DATA_TYPE* A_gpu, DATA_TYPE* B_gpu, DATA_TYPE* x_gpu,
   t_start = rtclock();
   for (int i = 0; i < 1; i++) {
     gesummv_kernel<<<grid, block, 0, stream5>>>(
-        A_gpu,B_gpu,x_gpu, y_gpu, tmp_gpu);
+        A_gpu, B_gpu, x_gpu, y_gpu, tmp_gpu);
     cudaDeviceSynchronize();
   }
   t_end = rtclock();
@@ -148,7 +148,7 @@ void gesummvCuda(DATA_TYPE* A_gpu, DATA_TYPE* B_gpu, DATA_TYPE* x_gpu,
   dim3 grid((unsigned int)ceil(((float)N) / ((float)block.x)), 1);
   t_start = rtclock();
   for (int i = 0; i < 1; i++) {
-    gesummv_kernel<<<grid, block>>>(A_gpu,B_gpu,x_gpu, y_gpu, tmp_gpu);
+    gesummv_kernel<<<grid, block>>>(A_gpu, B_gpu, x_gpu, y_gpu, tmp_gpu);
     cudaDeviceSynchronize();
   }
   t_end = rtclock();
