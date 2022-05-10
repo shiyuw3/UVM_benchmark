@@ -1,0 +1,273 @@
+64bit elf: type=2, abi=7, sm=20, toolkit=80, flags = 0x140514
+Sections:
+Index Offset   Size ES Align   Type   Flags Link     Info Name
+    1     40    23a  0  1    STRTAB       0    0        0 .shstrtab
+    2    27a    2a0  0  1    STRTAB       0    0        0 .strtab
+    3    520    108 18  8    SYMTAB       0    2        7 .symtab
+    4    628     6c  0  4 CUDA_INFO       0    3        0 .nv.info
+    5    694     58  0  4 CUDA_INFO       0    3        c .nv.info._Z17fdtd_step2_kernelPfS_S_i
+    6    6ec     68  0  4 CUDA_INFO       0    3        d .nv.info._Z17fdtd_step1_kernelPfS_S_S_i
+    7    754     58  0  4 CUDA_INFO       0    3        e .nv.info._Z17fdtd_step3_kernelPfS_S_i
+    8    7ac     3c  0  4  PROGBITS       2    0        c .nv.constant0._Z17fdtd_step2_kernelPfS_S_i
+    9    7e8     44  0  4  PROGBITS       2    0        d .nv.constant0._Z17fdtd_step1_kernelPfS_S_S_i
+    a    82c      4  0  4  PROGBITS       2    0        e .nv.constant16._Z17fdtd_step3_kernelPfS_S_i
+    b    830     3c  0  4  PROGBITS       2    0        e .nv.constant0._Z17fdtd_step3_kernelPfS_S_i
+    c    86c     e0  0  4  PROGBITS       6    3  a000008 .text._Z17fdtd_step2_kernelPfS_S_i
+    d    94c    128  0  4  PROGBITS       6    3  a000009 .text._Z17fdtd_step1_kernelPfS_S_S_i
+    e    a74     f0  0  4  PROGBITS       6    3  c00000a .text._Z17fdtd_step3_kernelPfS_S_i
+
+.section .strtab
+
+.section .shstrtab
+
+.section .symtab
+ index           value           size      info    other  shndx    name  
+   0               0               0        0        0      0     (null)
+   1               0               0        3        0      c     .text._Z17fdtd_step2_kernelPfS_S_i
+   2               0               0        3        0      8     .nv.constant0._Z17fdtd_step2_kernelPfS_S_i
+   3               0               0        3        0      d     .text._Z17fdtd_step1_kernelPfS_S_S_i
+   4               0               0        3        0      9     .nv.constant0._Z17fdtd_step1_kernelPfS_S_S_i
+   5               0               0        3        0      e     .text._Z17fdtd_step3_kernelPfS_S_i
+   6               0               0        3        0      a     .nv.constant16._Z17fdtd_step3_kernelPfS_S_i
+   7               0               0        3        0      b     .nv.constant0._Z17fdtd_step3_kernelPfS_S_i
+   8               0             224       12       10      c     _Z17fdtd_step2_kernelPfS_S_i
+   9               0             296       12       10      d     _Z17fdtd_step1_kernelPfS_S_S_i
+  10               0             240       12       10      e     _Z17fdtd_step3_kernelPfS_S_i
+
+
+.nv.constant0._Z17fdtd_step2_kernelPfS_S_i
+0x00000000  0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  
+
+
+.nv.constant0._Z17fdtd_step1_kernelPfS_S_S_i
+0x00000000  0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+
+
+
+.nv.constant16._Z17fdtd_step3_kernelPfS_S_i
+0xbf333333  
+
+
+.nv.constant0._Z17fdtd_step3_kernelPfS_S_i
+0x00000000  0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  0x00000000  0x00000000  
+0x00000000  0x00000000  
+
+
+.nv.info
+	<0x1>
+	Attribute:	EIATTR_MAX_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	0xa 0x0 
+	<0x2>
+	Attribute:	EIATTR_MIN_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	function: _Z17fdtd_step3_kernelPfS_S_i(0xa)	min stack size: 0x0
+	<0x3>
+	Attribute:	EIATTR_FRAME_SIZE
+	Format:	EIFMT_SVAL
+	Value:	function: _Z17fdtd_step3_kernelPfS_S_i(0xa)	frame size: 0x0
+	<0x4>
+	Attribute:	EIATTR_MAX_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	0x9 0x0 
+	<0x5>
+	Attribute:	EIATTR_MIN_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	function: _Z17fdtd_step1_kernelPfS_S_S_i(0x9)	min stack size: 0x0
+	<0x6>
+	Attribute:	EIATTR_FRAME_SIZE
+	Format:	EIFMT_SVAL
+	Value:	function: _Z17fdtd_step1_kernelPfS_S_S_i(0x9)	frame size: 0x0
+	<0x7>
+	Attribute:	EIATTR_MAX_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	0x8 0x0 
+	<0x8>
+	Attribute:	EIATTR_MIN_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	function: _Z17fdtd_step2_kernelPfS_S_i(0x8)	min stack size: 0x0
+	<0x9>
+	Attribute:	EIATTR_FRAME_SIZE
+	Format:	EIFMT_SVAL
+	Value:	function: _Z17fdtd_step2_kernelPfS_S_i(0x8)	frame size: 0x0
+
+
+.nv.info._Z17fdtd_step2_kernelPfS_S_i
+	<0x1>
+	Attribute:	EIATTR_PARAM_CBANK
+	Format:	EIFMT_SVAL
+	Value:	0x2 0x1c0020 
+	<0x2>
+	Attribute:	EIATTR_CBANK_PARAM_SIZE
+	Format:	EIFMT_HVAL
+	Value:	0x1c
+	<0x3>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x3	Offset  : 0x18	Size    : 0x4
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x4>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x2	Offset  : 0x10	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x5>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x1	Offset  : 0x8	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x6>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x0	Offset  : 0x0	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x7>
+	Attribute:	EIATTR_CRS_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	0xc 
+
+
+.nv.info._Z17fdtd_step1_kernelPfS_S_S_i
+	<0x1>
+	Attribute:	EIATTR_PARAM_CBANK
+	Format:	EIFMT_SVAL
+	Value:	0x4 0x240020 
+	<0x2>
+	Attribute:	EIATTR_CBANK_PARAM_SIZE
+	Format:	EIFMT_HVAL
+	Value:	0x24
+	<0x3>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x4	Offset  : 0x20	Size    : 0x4
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x4>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x3	Offset  : 0x18	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x5>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x2	Offset  : 0x10	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x6>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x1	Offset  : 0x8	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x7>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x0	Offset  : 0x0	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x8>
+	Attribute:	EIATTR_CRS_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	0x18 
+
+
+.nv.info._Z17fdtd_step3_kernelPfS_S_i
+	<0x1>
+	Attribute:	EIATTR_PARAM_CBANK
+	Format:	EIFMT_SVAL
+	Value:	0x7 0x1c0020 
+	<0x2>
+	Attribute:	EIATTR_CBANK_PARAM_SIZE
+	Format:	EIFMT_HVAL
+	Value:	0x1c
+	<0x3>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x3	Offset  : 0x18	Size    : 0x4
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x4>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x2	Offset  : 0x10	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x5>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x1	Offset  : 0x8	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x6>
+	Attribute:	EIATTR_KPARAM_INFO
+	Format:	EIFMT_SVAL
+	Value:	Index : 0x0	Ordinal : 0x0	Offset  : 0x0	Size    : 0x8
+		Pointee's logAlignment : 0x0	Space : 0x0	cbank : 0x1f	Parameter Space : CBANK	
+	<0x7>
+	Attribute:	EIATTR_CRS_STACK_SIZE
+	Format:	EIFMT_SVAL
+	Value:	0xc 
+
+
+.text._Z17fdtd_step2_kernelPfS_S_i
+bar = 0	reg = 10	lmem=0	smem=0
+0x00005de4  0x28004404  0x94001c04  0x2c000000  
+0x84009c04  0x2c000000  0x9800dc04  0x2c000000  
+0x88011c04  0x2c000000  0x20001ca3  0x20044000  
+0x30309ca3  0x20084000  0xc001dc23  0x188ec012  
+0xc021dc23  0x1880c012  0xfc01dc23  0x1a000000  
+0x0000a1e7  0x40000002  0xc02140a3  0x2000c012  
+0x1000c1e2  0x18000000  0xc42000a3  0x2000c012  
+0xfc518003  0x4800ffff  0xc05100a3  0x20078000  
+0xd05140e3  0x20868000  0xc06200a3  0x20078000  
+0x00410085  0x84000000  0xd06240e3  0x20868000  
+0x800080a3  0x20078000  0x00818085  0x84000000  
+0x9000c0e3  0x20868000  0x00200085  0x84000000  
+0x18410100  0x50000000  0x00400000  0x3000efc0  
+0x00200085  0x94000000  0x00001de7  0x80000000  
+
+
+
+.text._Z17fdtd_step1_kernelPfS_S_S_i
+bar = 0	reg = 10	lmem=0	smem=0
+0x00005de4  0x28004404  0x94001c04  0x2c000000  
+0x84009c04  0x2c000000  0x9800dc04  0x2c000000  
+0x88011c04  0x2c000000  0x20001ca3  0x20044000  
+0x30309ca3  0x20084000  0xc001dc23  0x188ec012  
+0xc021dc23  0x1880c012  0x000021e7  0x80000000  
+0xfc21dc23  0x190e0000  0x000081e7  0x40000002  
+0xc02020a3  0x2000c012  0x1000e1e2  0x18000000  
+0x4000a003  0x4800ffed  0xe001a0a3  0x20078000  
+0xf001e0e3  0x20868000  0xe02220a3  0x20078000  
+0x00616085  0x84000000  0xf02260e3  0x20868000  
+0xc000a0a3  0x20078000  0x00812085  0x84000000  
+0xd000e0e3  0x20868000  0x00202085  0x84000000  
+0x10512100  0x50000000  0x00402000  0x3000efc0  
+0x00202085  0x94000000  0x0000a1e7  0x40000001  
+0x0000c1e4  0x28004001  0x100141e2  0x18000000  
+0x803080a3  0x200b8000  0x9030c0e3  0x208a8000  
+0xc00100a3  0x200b8000  0x00208085  0x8c000000  
+0xd00140e3  0x208a8000  0x00408085  0x94000000  
+0x00001de7  0x80000000  
+
+
+.text._Z17fdtd_step3_kernelPfS_S_i
+bar = 0	reg = 12	lmem=0	smem=0
+0x00005de4  0x28004404  0x94001c04  0x2c000000  
+0x84009c04  0x2c000000  0x9800dc04  0x2c000000  
+0x88011c04  0x2c000000  0x20001ca3  0x20044000  
+0x30309ca3  0x20084000  0xc001dc23  0x188ec012  
+0xc021dc23  0x1880c012  0x6000a1e7  0x40000002  
+0xc42100a3  0x2000c012  0x1000c1e2  0x18000000  
+0xc02000a3  0x2000c012  0x804280a3  0x20078000  
+0x9042c0e3  0x20868000  0xa00100a3  0x20078000  
+0x00a20085  0x84000000  0xb00140e3  0x20868000  
+0x10a24085  0x84000000  0xc00080a3  0x20078000  
+0x0041c085  0x8400004b  0x00418085  0x84000000  
+0xd000c0e3  0x20868000  0x00200085  0x84000000  
+0x20910100  0x50000000  0x1c410000  0x50000000  
+0x18410100  0x50000000  0x04400000  0x30004000  
+0x00200085  0x94000000  0x00001de7  0x80000000  
+
+
