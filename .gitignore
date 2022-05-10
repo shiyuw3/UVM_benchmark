@@ -145,3 +145,4 @@ nvbit_release/
 trace/
 *_trace
 *.log
+_cuobjdump_*
