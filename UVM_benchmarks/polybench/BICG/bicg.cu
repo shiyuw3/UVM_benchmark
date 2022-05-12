@@ -22,8 +22,8 @@
 #define GPU_DEVICE 0
 
 /* Problem size. */
-#define NX 1200
-#define NY 1200
+#define NX 1500
+#define NY 1500
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 256
