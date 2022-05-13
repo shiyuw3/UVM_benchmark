@@ -129,7 +129,7 @@ void ataxGpu(DATA_TYPE* A_gpu, DATA_TYPE* x_gpu, DATA_TYPE* y_gpu,
 
   t_start = rtclock();
   atax_kernel1<<<grid1, block>>>(A_gpu, x_gpu, tmp_gpu);
-  cudaDeviceSynchronize();
+  // cudaDeviceSynchronize();
   atax_kernel2<<<grid2, block>>>(A_gpu, y_gpu, tmp_gpu);
   cudaDeviceSynchronize();
   t_end = rtclock();
