@@ -22,8 +22,8 @@
 #define GPU_DEVICE 0
 
 /* Problem size. */
-#define NX 1500
-#define NY 1500
+#define NX 1200
+#define NY 1200
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 256
@@ -143,7 +143,7 @@ void bicgCuda(DATA_TYPE* A_gpu, DATA_TYPE* r_gpu, DATA_TYPE* s_gpu,
 
   t_start = rtclock();
   bicg_kernel1<<<grid1, block>>>(A_gpu, r_gpu, s_gpu);
-  cudaDeviceSynchronize();
+  // cudaDeviceSynchronize();
   bicg_kernel2<<<grid2, block>>>(A_gpu, p_gpu, q_gpu);
   cudaDeviceSynchronize();
   t_end = rtclock();
