@@ -22,8 +22,8 @@
 #define GPU_DEVICE 0
 
 /* Problem size */
-#define M 1024
-#define N 1024
+#define M 500
+#define N 500
 
 /* Thread block dimensions for kernel 1*/
 #define DIM_THREAD_BLOCK_KERNEL_1_X 256
@@ -232,11 +232,11 @@ void correlationCuda(DATA_TYPE* data_gpu, DATA_TYPE* mean_gpu,
 
   t_start = rtclock();
   mean_kernel<<< grid1, block1 >>>(mean_gpu, data_gpu);
-  cudaDeviceSynchronize();
+  // cudaDeviceSynchronize();
   std_kernel<<< grid2, block2 >>>(mean_gpu, stddev_gpu, data_gpu);
-  cudaDeviceSynchronize();
+  // cudaDeviceSynchronize();
   reduce_kernel<<< grid3, block3 >>>(mean_gpu, stddev_gpu, data_gpu);
-  cudaDeviceSynchronize();
+  // cudaDeviceSynchronize();
   corr_kernel<<< grid4, block4 >>>(symmat_gpu, data_gpu);
   cudaDeviceSynchronize();
   t_end = rtclock();
