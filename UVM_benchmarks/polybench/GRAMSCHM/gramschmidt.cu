@@ -24,7 +24,7 @@
 #define GPU_DEVICE 0
 
 /* Problem size */
-#define M 200000
+#define M 40000
 #define N 2
 
 /* Thread block dimensions */
