@@ -172,6 +172,11 @@ void covarianceCuda(DATA_TYPE* data_gpu, DATA_TYPE* symmat_gpu,
 
   t_start = rtclock();
   mean_kernel<<<grid1, block1>>>(mean_gpu, data_gpu);
+  // FIXME: the following two cudaDeviceSynchronize() will result in abnormal
+  // overwrite of gpgpu-sim global variable, which I think is from memory leak
+  // of original gpgpu-sim_UVMSmart implementation. However, comment them out
+  // is theoretically right in CUDA programming model, so I think it is OK to
+  // test our implementation.
   // cudaDeviceSynchronize();
   reduce_kernel<<<grid2, block2>>>(mean_gpu, data_gpu);
   // cudaDeviceSynchronize();

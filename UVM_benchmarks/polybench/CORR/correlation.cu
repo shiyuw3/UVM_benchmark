@@ -230,6 +230,11 @@ void correlationCuda(DATA_TYPE* data_gpu, DATA_TYPE* mean_gpu,
   dim3 grid4((size_t)(ceil((float)(M)) / ((float)DIM_THREAD_BLOCK_KERNEL_4_X)),
              1);
 
+  // FIXME: the following three cudaDeviceSynchronize() will result in abnormal
+  // overwrite of gpgpu-sim global variable, which I think is from memory leak
+  // of original gpgpu-sim_UVMSmart implementation. However, comment them out
+  // is theoretically right in CUDA programming model, so I think it is OK to
+  // test our implementation.
   t_start = rtclock();
   mean_kernel<<< grid1, block1 >>>(mean_gpu, data_gpu);
   // cudaDeviceSynchronize();
