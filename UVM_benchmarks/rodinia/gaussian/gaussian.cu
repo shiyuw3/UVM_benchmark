@@ -379,11 +379,12 @@ void ForwardSub() {
   gettimeofday(&time_start, NULL);
   for (t = 0; t < (Size - 1); t++) {
     Fan1<<<dimGrid, dimBlock>>>(m, a, Size, t);
-    cudaDeviceSynchronize();
+    // cudaDeviceSynchronize();
     Fan2<<<dimGridXY, dimBlockXY>>>(m, a, b, Size, Size - t, t);
-    cudaDeviceSynchronize();
+    // cudaDeviceSynchronize();
     checkCUDAError("Fan2");
   }
+  cudaDeviceSynchronize();
   // end timing kernels
   struct timeval time_end;
   gettimeofday(&time_end, NULL);
