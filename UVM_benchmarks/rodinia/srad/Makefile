@@ -9,16 +9,8 @@ SRC = srad.cu
 EXE = srad
 
 release: $(SRC)
-	$(CC) $(KERNEL_DIM) $(SRC) -o $(EXE) -I$(INCLUDE) -L$(CUDA_LIB_DIR) 
-
-enum: $(SRC)
-	$(CC) $(KERNEL_DIM) -deviceemu $(SRC) -o $(EXE) -I$(INCLUDE) -L$(CUDA_LIB_DIR) 
-
-debug: $(SRC)
-	$(CC) $(KERNEL_DIM) -g $(SRC) -o $(EXE) -I$(INCLUDE) -L$(CUDA_LIB_DIR) 
-
-debugenum: $(SRC)
-	$(CC) $(KERNEL_DIM) -g -deviceemu $(SRC) -o $(EXE) -I$(INCLUDE) -L$(CUDA_LIB_DIR) 
+	$(CC) $(KERNEL_DIM) $(SRC) -o $(EXE) -lcudart -Wno-deprecated-gpu-targets -O3
 
 clean: $(SRC)
+	rm -f *~ gpgpusim_power_report* _cuobjdump_* *.txt
 	rm -f $(EXE) $(EXE).linkinfo result.txt
