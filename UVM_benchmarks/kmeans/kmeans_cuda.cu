@@ -24,7 +24,7 @@ double gpu_time_used;
 }
 
 __global__ void get_dst(float *dst, float *x, float *y,
-                        float *mu_x, float *mu_y){
+                        float *mu_x, float *mu_y) {
   int i = blockIdx.x;
   int j = threadIdx.x;
 
