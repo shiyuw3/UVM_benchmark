@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 
   /* perform kmeans */
   const auto start = std::chrono::high_resolution_clock::now();
-  kmeans(/* nreps = */100, n, k, x_d, y_d, mu_x_d, mu_y_d, group_d, nx_d, ny_d,
+  kmeans(/* nreps = */2, n, k, x_d, y_d, mu_x_d, mu_y_d, group_d, nx_d, ny_d,
          sum_x_d, sum_y_d, dst_d);
   CUDA_CALL(cudaDeviceSynchronize());
 
@@ -206,6 +206,7 @@ void read_data(float **x, float **y, float **mu_x, float **mu_y, int *n, int *k,
   }
   fclose(fp);
 
+  // k = 3
   *k = 0;
   fp = fopen("../../data/kmeans/initCoord.txt", "r");
   while (fgets(buf, 64, fp) != NULL) {
