@@ -23,8 +23,8 @@
 #define GPU_DEVICE 0
 
 /* Problem size */
-#define N 2048
-#define M 2048
+#define N 500
+#define M 500
 
 /* Thread block dimensions */
 #define DIM_THREAD_BLOCK_X 32
@@ -42,7 +42,7 @@ typedef float DATA_TYPE;
 void init_arrays(DATA_TYPE *A, DATA_TYPE *B, DATA_TYPE *C, DATA_TYPE *A_gpu, DATA_TYPE *B_gpu, DATA_TYPE *C_gpu)
 {
 	int i, j;
-  
+
 	for (i = 0; i < N; i++)
     	{
     		for (j = 0; j < N; j++)
@@ -50,7 +50,7 @@ void init_arrays(DATA_TYPE *A, DATA_TYPE *B, DATA_TYPE *C, DATA_TYPE *A_gpu, DAT
 			C[i*N + j] = ((DATA_TYPE) i*j + 2) / N;
 			C_gpu[i*N + j] = ((DATA_TYPE) i*j + 2) / N;
 		}
-      	
+
 		for (j = 0; j < M; j++)
 		{
 	  		A[i*N + j] = ((DATA_TYPE) i*j) / N;
@@ -65,7 +65,7 @@ void init_arrays(DATA_TYPE *A, DATA_TYPE *B, DATA_TYPE *C, DATA_TYPE *A_gpu, DAT
 void syr2k(DATA_TYPE *A, DATA_TYPE *B, DATA_TYPE *C)
 {
 	int i, j, k;
-		
+
   	for (i = 0; i < N; i++)
 	{
    		for (j = 0; j < N; j++)
@@ -99,12 +99,12 @@ void compareResults(DATA_TYPE *C, DATA_TYPE *C_outputFromGpu)
 		for (j=0; j<N; j++)
 		{
 			if (percentDiff(C[i*N + j], C_outputFromGpu[i*N + j]) > PERCENT_DIFF_ERROR_THRESHOLD)
-			{ 
+			{
 				fail++;
 			}
 		}
 	}
-	
+
 	// print results
 	printf("Non-Matching CPU-GPU Outputs Beyond Error Threshold of %4.2f Percent: %d\n", PERCENT_DIFF_ERROR_THRESHOLD, fail);
 }
@@ -127,7 +127,7 @@ __global__ void syr2k_kernel(DATA_TYPE *a, DATA_TYPE *b, DATA_TYPE *c)
 	if ((i < N) && (j < N))
 	{
 		c[i * N + j] *= BETA;
-		
+
 		int k;
 		for(k = 0; k < M; k++)
 		{
@@ -137,7 +137,7 @@ __global__ void syr2k_kernel(DATA_TYPE *a, DATA_TYPE *b, DATA_TYPE *c)
 }
 
 
-void syr2kCuda(DATA_TYPE* A_gpu, DATA_TYPE* B_gpu, DATA_TYPE* C_gpu) 
+void syr2kCuda(DATA_TYPE* A_gpu, DATA_TYPE* B_gpu, DATA_TYPE* C_gpu)
 {
 	double t_start, t_end;
 	dim3 block(DIM_THREAD_BLOCK_X, DIM_THREAD_BLOCK_Y);
@@ -169,10 +169,10 @@ int main()
 	cudaMallocManaged(&C_gpu, sizeof(DATA_TYPE) * N * N);
 
 	init_arrays(A, B, C,A_gpu, B_gpu, C_gpu );
-    
+
 	GPU_argv_init();
 	syr2kCuda(A_gpu, B_gpu, C_gpu);
-	
+
 	t_start = rtclock();
 	syr2k(A, B, C);
 	t_end = rtclock();
