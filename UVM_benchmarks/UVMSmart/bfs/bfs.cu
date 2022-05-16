@@ -170,8 +170,8 @@ void BFSGraph(int argc, char** argv) {
                                  no_of_nodes);
     // check if kernel execution generated and error
 
-    Kernel2<<< grid, threads, 0>>>(graph_mask, updating_graph_mask,
-                                   graph_visited, d_over, no_of_nodes);
+    Kernel2<<<grid, threads, 0>>>(graph_mask, updating_graph_mask,
+                                  graph_visited, d_over, no_of_nodes);
     // check if kernel execution generated and error
 
     cudaMemcpy(&stop, d_over, sizeof(bool), cudaMemcpyDeviceToHost);
