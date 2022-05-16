@@ -15,9 +15,9 @@
 
 // Constants used by the program
 #define BLOCK_DIM 16
-#define ENABLE_CPU 0
+#define ENABLE_CPU 1
 
-//----------------------------------------------------------------------------//
+//-----------------1----------------------------------------------------------//
 //                                    KERNELS                                 //
 //----------------------------------------------------------------------------//
 __global__ void extract_with_interpolation(int nthreads, float *data,
@@ -500,11 +500,8 @@ int main(void) {
   float *query;         // Pointer to query point array
   float *dist, *dist_c; // Pointer to distance array
   int *ind, *ind_c;     // Pointer to index array
-  // ref_nb & query_nb:
-  // ~45000: 100% usage, ~30s
-  // ~46000: oversubscription, ~300s
-  int ref_nb = 46000;    // Reference point number, max=65535
-  int query_nb = 46000;  // Query point number,     max=65535
+  int ref_nb = 300;    // Reference point number, max=65535
+  int query_nb = 300;  // Query point number,     max=65535
   int dim = 32;         // Dimension of points
   int k = 20;           // Nearest neighbors to consider
   int iterations = 1;
@@ -562,7 +559,7 @@ int main(void) {
 #if ENABLE_CPU
   printf("On CPU: \n");
 
-  nb_correct_precision = 0;
+  nb_correct_precisions = 0;
   nb_correct_indexes = 0;
 
   struct timeval tic;
