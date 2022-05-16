@@ -13,7 +13,7 @@ __global__ void kernel(float* input, float* output, float* table, size_t size) {
 
   float in_f = input[x_id];
   int in_i = (int)(floor(in_f));
-  int table_index = (int)((in_f - float(in_i)) *( (float)(N) ));
+  int table_index = (int)((in_f - float(in_i)) * ((float)(N)));
   float* t = table + table_index;
   output[table_index] = t[0] * in_f;
 }
