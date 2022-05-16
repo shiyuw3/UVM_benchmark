@@ -49,7 +49,7 @@ __global__ void needle_cuda_shared_1(int* referrence,
 
   temp[tx + 1][0] = matrix_cuda[index_w + cols * tx];
 
-   __syncthreads();
+  __syncthreads();
 
   temp[0][tx + 1] = matrix_cuda[index_n];
 
@@ -70,7 +70,7 @@ __global__ void needle_cuda_shared_1(int* referrence,
     __syncthreads();
   }
 
-  for (int m = BLOCK_SIZE - 2; m >=0; m--) {
+  for (int m = BLOCK_SIZE - 2; m >= 0; m--) {
     if (tx <= m) {
       int t_index_x = tx + BLOCK_SIZE - m ;
       int t_index_y = BLOCK_SIZE - tx;
