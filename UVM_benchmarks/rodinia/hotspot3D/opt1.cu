@@ -25,7 +25,7 @@ __global__ void hotspotOpt1(float *p, float* tIn, float *tOut, float sdc,
 
   float temp1, temp2, temp3;
   temp1 = temp2 = tIn[c];
-  temp3 = tIn[c+xy];
+  temp3 = tIn[c + xy];
   tOut[c] = cc * temp2 + cw * tIn[W] + ce * tIn[E] + cs * tIn[S] + cn * tIn[N] +
             cb * temp1 + ct * temp3 + sdc * p[c] + ct * amb_temp;
   c += xy;
@@ -34,7 +34,7 @@ __global__ void hotspotOpt1(float *p, float* tIn, float *tOut, float sdc,
   N += xy;
   S += xy;
 
-  for (int k = 1; k < nz-1; ++k) {
+  for (int k = 1; k < nz - 1; ++k) {
     temp1 = temp2;
     temp2 = temp3;
     temp3 = tIn[c+xy];
