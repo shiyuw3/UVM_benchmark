@@ -109,10 +109,10 @@ void runTest(int argc, char** argv) {
   printf("Start Needleman-Wunsch\n");
 
   // please define your own sequence.
-  for (int i = 1; i< max_rows ; i++) {
+  for (int i = 1; i < max_rows ; i++) {
     input_itemsets[i * max_cols] = rand() % 10 + 1;
   }
-  for (int j = 1; j< max_cols ; j++) {
+  for (int j = 1; j < max_cols ; j++) {
     input_itemsets[j] = rand() % 10 + 1;
   }
 
@@ -128,10 +128,10 @@ void runTest(int argc, char** argv) {
   for (int j = 1; j < max_cols; j++)
     input_itemsets[j] = -j * penalty;
 
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-  float elapsed_time;
+  // cudaEvent_t start, stop;
+  // cudaEventCreate(&start);
+  // cudaEventCreate(&stop);
+  // float elapsed_time;
 
   // cudaMalloc((void**)&referrence_cuda, sizeof(int) * size);
   // cudaMalloc((void**)&matrix_cuda, sizeof(int) * size);
@@ -144,7 +144,7 @@ void runTest(int argc, char** argv) {
   dim3 dimBlock(BLOCK_SIZE, 1);
   int block_width = (max_cols - 1) / BLOCK_SIZE;
 
-  cudaEventRecord(start, 0);
+  // cudaEventRecord(start, 0);
   printf("Processing top-left matrix\n");
   // process top-left matrix
   for (int i = 1 ; i <= block_width; i++) {
@@ -162,11 +162,14 @@ void runTest(int argc, char** argv) {
         referrence_cuda, input_itemsets, max_cols, penalty, i, block_width);
   }
 
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop);
-  cudaEventElapsedTime(&elapsed_time, start, stop);
+	// Wait for GPU to finish before accessing on host
+  cudaDeviceSynchronize();
 
-  printf("\nTime taken is %lf seconds.\n", (elapsed_time) / 1000);
+  // cudaEventRecord(stop, 0);
+  // cudaEventSynchronize(stop);
+  // cudaEventElapsedTime(&elapsed_time, start, stop);
+
+  // printf("\nTime taken is %lf seconds.\n", (elapsed_time) / 1000);
   // cudaMemcpy(output_itemsets, matrix_cuda, sizeof(int) * size,
   //            cudaMemcpyDeviceToHost);
 
