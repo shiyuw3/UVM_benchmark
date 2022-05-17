@@ -146,7 +146,7 @@ __global__ void covar_kernel(DATA_TYPE *symmat, DATA_TYPE *data) {
   if ((j1 >= 1) && (j1 < (M + 1))) {
     for (j2 = j1; j2 < (M + 1); j2++) {
       symmat[j1 * (M + 1) + j2] = 0.0;
-      for(i = 1; i < (N + 1); i++) {
+      for (i = 1; i < (N + 1); i++) {
         symmat[j1 * (M + 1) + j2] +=
             data[i * (M + 1) + j1] * data[i * (M + 1) + j2];
       }
