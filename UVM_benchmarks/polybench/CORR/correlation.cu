@@ -236,13 +236,13 @@ void correlationCuda(DATA_TYPE* data_gpu, DATA_TYPE* mean_gpu,
   // is theoretically right in CUDA programming model, so I think it is OK to
   // test our implementation.
   t_start = rtclock();
-  mean_kernel<<< grid1, block1 >>>(mean_gpu, data_gpu);
+  mean_kernel<<<grid1, block1>>>(mean_gpu, data_gpu);
   // cudaDeviceSynchronize();
-  std_kernel<<< grid2, block2 >>>(mean_gpu, stddev_gpu, data_gpu);
+  std_kernel<<<grid2, block2>>>(mean_gpu, stddev_gpu, data_gpu);
   // cudaDeviceSynchronize();
-  reduce_kernel<<< grid3, block3 >>>(mean_gpu, stddev_gpu, data_gpu);
+  reduce_kernel<<<grid3, block3>>>(mean_gpu, stddev_gpu, data_gpu);
   // cudaDeviceSynchronize();
-  corr_kernel<<< grid4, block4 >>>(symmat_gpu, data_gpu);
+  corr_kernel<<<grid4, block4>>>(symmat_gpu, data_gpu);
   cudaDeviceSynchronize();
   t_end = rtclock();
   fprintf(stdout, "GPU Runtime: %0.6lfs\n", t_end - t_start);
