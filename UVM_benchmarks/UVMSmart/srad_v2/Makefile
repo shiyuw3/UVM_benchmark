@@ -2,7 +2,8 @@
 
 # CUDA compiler
 NVCC = nvcc
-NVCC_FLAGS = -g -Wno-deprecated-gpu-targets
+# NVCC_FLAGS = -g -Wno-deprecated-gpu-targets
+NVCC_FLAGS = -Wno-deprecated-gpu-targets -O3
 
 default:
 	$(NVCC) $(NVCC_FLAGS) $(KERNEL_DIM) srad.cu -lcudart -o srad
