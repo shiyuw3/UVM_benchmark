@@ -164,13 +164,12 @@ void fdtdCuda(DATA_TYPE* _fict_gpu, DATA_TYPE* ex_gpu, DATA_TYPE* ey_gpu,
 
   for (int t = 0; t < tmax; t++) {
     fdtd_step1_kernel<<<grid, block>>>(_fict_gpu, ex_gpu, ey_gpu, hz_gpu, t);
-    // cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
     fdtd_step2_kernel<<<grid, block>>>(ex_gpu, ey_gpu, hz_gpu, t);
-    // cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
     fdtd_step3_kernel<<<grid, block>>>(ex_gpu, ey_gpu, hz_gpu, t);
-    // cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
   }
-  cudaDeviceSynchronize();
 
   t_end = rtclock();
   fprintf(stdout, "GPU Runtime: %0.6lfs\n", t_end - t_start);
