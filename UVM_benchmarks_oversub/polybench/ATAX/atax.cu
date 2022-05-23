@@ -95,8 +95,9 @@ __global__ void atax_kernel1(DATA_TYPE *A, DATA_TYPE *x, DATA_TYPE *tmp) {
   size_t i = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (i < NX) {
-    size_t j;
-    for (j = 0; j < NY; j++) {
+    tmp[i] = (DATA_TYPE)0;
+
+    for (size_t j = 0; j < NY; j++) {
       tmp[i] += A[i * NY + j] * x[j];
     }
   }
@@ -106,8 +107,9 @@ __global__ void atax_kernel2(DATA_TYPE *A, DATA_TYPE *y, DATA_TYPE *tmp) {
   size_t j = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (j < NY) {
-    size_t i;
-    for (i = 0; i < NX; i++) {
+    y[j] = (DATA_TYPE)0;
+
+    for (size_t i = 0; i < NX; i++) {
       y[j] += A[i * NY + j] * tmp[i];
     }
   }

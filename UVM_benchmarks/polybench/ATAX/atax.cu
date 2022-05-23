@@ -46,8 +46,8 @@ void init_array(DATA_TYPE *x, DATA_TYPE *A,
     x_gpu[i] = i * M_PI;
 
     for (j = 0; j < NY; j++) {
-      A[i*NY + j] = ((DATA_TYPE) i*(j)) / NX;
-      A_gpu[i*NY + j] = ((DATA_TYPE) i*(j)) / NX;
+      A[i * NY + j] = ((DATA_TYPE)i * (j)) / NX;
+      A_gpu[i * NY + j] = ((DATA_TYPE)i * (j)) / NX;
     }
   }
 }
@@ -79,8 +79,9 @@ __global__ void atax_kernel1(DATA_TYPE *A, DATA_TYPE *x, DATA_TYPE *tmp) {
   int i = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (i < NX) {
-    int j;
-    for (j = 0; j < NY; j++) {
+    tmp[i] = (DATA_TYPE)0;
+
+    for (int j = 0; j < NY; j++) {
       tmp[i] += A[i * NY + j] * x[j];
     }
   }
@@ -90,8 +91,9 @@ __global__ void atax_kernel2(DATA_TYPE *A, DATA_TYPE *y, DATA_TYPE *tmp) {
   int j = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (j < NY) {
-    int i;
-    for (i = 0; i < NX; i++) {
+    y[j] = (DATA_TYPE)0;
+
+    for (int i = 0; i < NX; i++) {
       y[j] += A[i * NY + j] * tmp[i];
     }
   }
