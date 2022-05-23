@@ -337,6 +337,11 @@ void dijkstraGPU(GraphData *graph, const int sourceVertex,
       // gpuErrchk(cudaPeekAtLastError());
       // gpuErrchk(cudaDeviceSynchronize());
       iteration++;
+
+      // Copy data from device for later use in while condition.
+      gpuErrchk(cudaMemcpy(h_finalizedVertices, d_finalizedVertices,
+                           sizeof(bool) * graph->numVertices,
+                           cudaMemcpyDeviceToHost));
     }
   }
 
@@ -433,6 +438,7 @@ int main() {
 
   dijkstraGPU(&graph, sourceVertex, h_shortestDistancesGPU);
 
+#if 0
   FILE *fp;
   fp = fopen ("output.txt", "w+");
   fprintf(fp,"\nGPU results\n");
@@ -441,6 +447,7 @@ int main() {
             sourceVertex, k, h_shortestDistancesGPU[k]);
   }
   fclose(fp);
+#endif
 
   // free(h_shortestDistancesCPU);
   cudaFree(h_shortestDistancesGPU);
