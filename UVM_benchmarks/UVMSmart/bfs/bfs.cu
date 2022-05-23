@@ -168,14 +168,9 @@ void BFSGraph(int argc, char** argv) {
     Kernel<<<grid, threads, 0>>>(graph_nodes, graph_edges, graph_mask,
                                  updating_graph_mask, graph_visited, cost,
                                  no_of_nodes);
-    // check if kernel execution generated and error
-
     Kernel2<<<grid, threads, 0>>>(graph_mask, updating_graph_mask,
                                   graph_visited, d_over, no_of_nodes);
-    // check if kernel execution generated and error
-
     cudaMemcpy(&stop, d_over, sizeof(bool), cudaMemcpyDeviceToHost);
-    cudaDeviceSynchronize();
     k++;
   } while(stop); // if no thread changes this value then the loop stops
 
