@@ -234,15 +234,15 @@ __global__ void srad_cuda_2(float *E_C,
     cs = c_cuda_temp[ty + 1][tx];
     cw = cc;
     ce = c_cuda_temp[ty][tx + 1];
- }
+  }
 
- // divergence (equ 58)
- d_sum = cn * N_C[index] + cs * S_C[index] + cw * W_C[index] + ce * E_C[index];
+  // divergence (equ 58)
+  d_sum = cn * N_C[index] + cs * S_C[index] + cw * W_C[index] + ce * E_C[index];
 
- // image update (equ 61)
- c_cuda_result[ty][tx] = temp[ty][tx] + 0.25 * lambda * d_sum;
+  // image update (equ 61)
+  c_cuda_result[ty][tx] = temp[ty][tx] + 0.25 * lambda * d_sum;
 
- __syncthreads();
+  __syncthreads();
 
- J_cuda[index] = c_cuda_result[ty][tx];
+  J_cuda[index] = c_cuda_result[ty][tx];
 }
