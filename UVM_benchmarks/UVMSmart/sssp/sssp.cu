@@ -290,16 +290,14 @@ void dijkstraGPU(GraphData *graph, const int sourceVertex,
   //       so we can't read rely on its host value if we need it for execution
   //       logic.
   bool *d_finalizedVertices;
-  gpuErrchk(cudaMalloc(&d_finalizedVertices,
-                       sizeof(bool) * graph->numVertices));
+  gpuErrchk(cudaMallocManaged(&d_finalizedVertices,
+                              sizeof(bool) * graph->numVertices));
   // float *d_shortestDistances;
   // gpuErrchk(cudaMallocManaged(&d_shortestDistances,
   //                             sizeof(float) * graph->numVertices));
   float *d_updatingShortestDistances;
   gpuErrchk(cudaMallocManaged(&d_updatingShortestDistances,
                               sizeof(float) * graph->numVertices));
-
-  bool *h_finalizedVertices = (bool *)malloc(sizeof(bool) * graph->numVertices);
 
   // --- Initialize mask Ma to false, cost array Ca and Updating cost array Ua
   //     to \u221e
@@ -309,13 +307,11 @@ void dijkstraGPU(GraphData *graph, const int sourceVertex,
   // gpuErrchk(cudaPeekAtLastError());
   // gpuErrchk(cudaDeviceSynchronize());
 
-  // --- Read mask array from device->host
-  gpuErrchk(cudaMemcpy(h_finalizedVertices, d_finalizedVertices,
-                       sizeof(bool) * graph->numVertices,
-                       cudaMemcpyDeviceToHost));
+  // Synchronization.
+  cudaDeviceSynchronize();
 
   int iteration = 0;
-  while (!allFinalizedVertices(h_finalizedVertices, graph->numVertices) &&
+  while (!allFinalizedVertices(d_finalizedVertices, graph->numVertices) &&
          iteration < MAX_ITERATION) {
     // --- In order to improve performance, we run some number of iterations
     //     without reading the results.  This might result in running more
@@ -338,21 +334,10 @@ void dijkstraGPU(GraphData *graph, const int sourceVertex,
       // gpuErrchk(cudaDeviceSynchronize());
       iteration++;
 
-      // Copy data from device for later use in while condition.
-      gpuErrchk(cudaMemcpy(h_finalizedVertices, d_finalizedVertices,
-                           sizeof(bool) * graph->numVertices,
-                           cudaMemcpyDeviceToHost));
+      // Synchronization.
+      cudaDeviceSynchronize();
     }
   }
-
-  // --- Copy the result to host
-  // gpuErrchk(cudaMemcpy(h_shortestDistances, d_shortestDistances,
-  //                      sizeof(float) * graph->numVertices,
-  //                      cudaMemcpyDeviceToHost));
-
-  cudaDeviceSynchronize();
-
-  free(h_finalizedVertices);
 
   gpuErrchk(cudaFree(graph->vertexArray));
   gpuErrchk(cudaFree(graph->edgeArray));
