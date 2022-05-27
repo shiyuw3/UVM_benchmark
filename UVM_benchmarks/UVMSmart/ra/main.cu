@@ -41,7 +41,7 @@ int main(void) {
   cudaDeviceSynchronize();
 
   for (int i = 0; i < N; i++) {
-    if(output[i] != 0) {
+    if (output[i] != 0) {
       printf("-%d %lf-\n", i, output[i]);
     }
   }
