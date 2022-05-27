@@ -145,12 +145,9 @@ void BFSGraph(int argc, char** argv) {
   cost[source] = 0;
 
   // make a bool to check if the execution is over
-  // NOTE: since gpgpu-sim_UVMSmart does not simulate UVM from host side,
-  //       so we need to explicit memcpy before we access it from host.
   bool *d_over;
-  cudaMalloc((void**)&d_over, sizeof(bool));
-
-  printf("Copied Everything to GPU memory\n");
+  cudaMallocManaged((void**)&d_over, sizeof(bool));
+  *d_over = false;
 
   // setup execution parameters
   dim3 grid(num_of_blocks, 1, 1);
@@ -158,21 +155,18 @@ void BFSGraph(int argc, char** argv) {
 
   int k = 0;
   printf("Start traversing the tree\n");
-  bool stop;
   // Call the Kernel untill all the elements of Frontier are not false
   do {
     // if no thread changes this value then the loop stops
-    stop = false;
-    cudaMemcpy(d_over, &stop, sizeof(bool), cudaMemcpyHostToDevice);
-
     Kernel<<<grid, threads, 0>>>(graph_nodes, graph_edges, graph_mask,
                                  updating_graph_mask, graph_visited, cost,
                                  no_of_nodes);
     Kernel2<<<grid, threads, 0>>>(graph_mask, updating_graph_mask,
                                   graph_visited, d_over, no_of_nodes);
-    cudaMemcpy(&stop, d_over, sizeof(bool), cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+
     k++;
-  } while(stop); // if no thread changes this value then the loop stops
+  } while(*d_over); // if no thread changes this value then the loop stops
 
   printf("Kernel Executed %d times\n",k);
 

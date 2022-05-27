@@ -1,1 +1,1 @@
-./bfs ../../../data/bfs/graph256k.txt
+./bfs.exe ../../../data/bfs/graph256k.txt
