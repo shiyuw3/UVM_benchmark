@@ -208,7 +208,7 @@ void scanDegrees(int queueSize) {
       queueSize, u_degrees, incrDegrees);
   cudaDeviceSynchronize();
   // count prefix sums on CPU for ends of blocks exclusive already written
-  previous block sum
+  // previous block sum
   incrDegrees[0] = 0;
   for (int i = 1024; i < queueSize + 1024; i += 1024) {
     incrDegrees[i / 1024] += incrDegrees[i / 1024 - 1];

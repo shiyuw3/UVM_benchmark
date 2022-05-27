@@ -1,41 +1,41 @@
-CUDA_INSTALL_PATH ?= /usr/local/cuda-10.2/
+CUDA_INSTALL_PATH ?= /usr/local/cuda/
 GCC_VER = -5
 
 CXX := /usr/bin/g++
 CC := /usr/bin/gcc
 CCPATH := gcc
 
-NVCC  := $(CUDA_INSTALL_PATH)bin/nvcc -ccbin $(CCPATH)
+NVCC  := $(CUDA_INSTALL_PATH)/bin/nvcc -ccbin $(CCPATH)
 LINK := $(NVCC)
 
 INCLUDES := -I. -I$(CUDA_INSTALL_PATH)include
 # Libraries
-LIB_CUDA := -L/usr/lib/nvidia-current -lcuda
+# LIB_CUDA := -L/usr/lib/nvidia-current -lcuda
+LIB_CUDA := -L/usr/lib/nvidia-current -lcudart
 
 # Options
-NVCCOPTIONS := -std=c++11  -Wno-deprecated-gpu-targets
+NVCCOPTIONS := -std=c++11  -Wno-deprecated-gpu-targets -O3 -lcudart
 CXXOPTIONS = -std=c++11 -O2
 
-COMMONFLAGS += $(INCLUDES) 
-NVCCFLAGS += $(NVCCOPTIONS)  $(COMMONFLAGS) 
+COMMONFLAGS += $(INCLUDES)
+NVCCFLAGS += $(NVCCOPTIONS)  $(COMMONFLAGS)
 CXXFLAGS += $(COMMONFLAGS) $(CXXOPTIONS)
 CFLAGS += $(COMMONFLAGS)
 TARGET = main
 OBJS =  graph.c.o bfsCPU.c.o main.cu.o bfsCUDA.cu.o
 LINKLINE = $(LINK) -o $(TARGET) $(OBJS) $(LIB_CUDA)
 
-
-
-$(TARGET):  $(OBJS) 
+$(TARGET):  $(OBJS)
 	$(LINKLINE)
 
-%.cu.o: %.cu 
+%.cu.o: %.cu
 	$(NVCC) $(NVCCFLAGS) -c $< -o $@
 
-%.c.o: %.cpp 
+%.c.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: clean
 
 clean:
-	rm -rf $(TARGET) *.o 
+	rm -rf $(TARGET) *.o
+	rm -f *~ gpgpusim_power_report* _cuobjdump_* *.txt
